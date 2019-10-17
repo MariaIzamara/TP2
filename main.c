@@ -40,7 +40,7 @@ void inicializa() {
     glEnable(GL_BLEND );
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    idTexturaChao = carregaTextura("images/grass.jpg");
+    idTexturaChao = carregaTextura("images/grama.png");
 
     mundo.l = 1000;
     mundo.a = 615;
