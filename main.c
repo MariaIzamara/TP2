@@ -29,6 +29,9 @@ void desenhaChao(GLuint id, dimpos objeto){
     glPopMatrix();   
 }
 
+void desenhaCena(){
+    desenhaChao(idTexturaChao, mundo);
+}
 
 void inicializa() {
     glClearColor(1, 1, 1, 1);
@@ -97,7 +100,7 @@ int main(int argc, char** argv) {
     glutCreateWindow("Haunted Park");
     inicializa();
 
-    glutDisplayFunc(desenhaChao);    
+    glutDisplayFunc(desenhaCena);    
     glutReshapeFunc(redimensiona);
 
 
