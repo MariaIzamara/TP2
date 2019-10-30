@@ -1,8 +1,15 @@
 typedef struct {
-    GLfloat l, a, x, y; // l = largura, a = altura
-} dimpos; // tudo que tem dimensões e/ou posição.
+    GLfloat x, y, z; 
+} coordenadas;
 
-dimpos mundo;
+coordenadas local, roda;
 
-GLuint idTexturaChao; // imagem do chão
+bool keyStates[256];
+
+GLuint idTexturaGrama; // imagem da grama
+
+GLMmodel* rodaM = NULL;   //objeto
+
+
+
 

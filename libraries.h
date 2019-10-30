@@ -7,5 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include "glm.h"
+
 //#include <SDL2/SDL.h>
 //#include <SDL2/SDL_mixer.h>
