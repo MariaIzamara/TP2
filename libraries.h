@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <math.h>
 #include "glm.h"
 
 //#include <SDL2/SDL.h>
