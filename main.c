@@ -22,48 +22,96 @@ void desenhaObjeto(GLMmodel* objeto, char* string, coordenadas coordenada){
     if(objeto == NULL){
             objeto = glmReadOBJ(string);    //manda pro objeto sua localização
             if(!objeto)
-                exit(0);
-            glmScale(objeto, 90.0); //o último parâmetro muda o que?
+                exit(0);           
+            glmScale(objeto, 90.0); //escala padrão, dentro de um obj
             glmUnitize(objeto);
             glmFacetNormals(objeto);
-            glmVertexNormals(objeto, 90.0, 1);  //o que esses parârametros mudam?
+            glmVertexNormals(objeto, 90.0, 1);  //serviria se eu tivesse texturas diferentes, mas tem que ter por padrão
         }
     glPushMatrix();
     glTranslatef(coordenada.x, coordenada.y, coordenada.z);
-    glPopMatrix();
+    glScalef(5, 5, 5); //escala dentro de uma matriz
     glmDraw(objeto, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
+    glPopMatrix();    
+}
+
+void posicionaCamera(int x, int y){ 
+    vetor.x = (GLfloat)x - mouse.x; //vetor é o Pfinal - Pinicial;
+    vetor.y = (GLfloat)y - mouse.y;
+
+    mouse.x = x;
+    mouse.y = y;
+
+    if(phi>=180)
+        phi=180;
+
+    //printf("deltaX = %f deltaY = %f \n", vetor.x, vetor.y);
+
+    teta += vetor.x/40.0;
+    phi -= vetor.y/40.0;
+
+    printf("phi %f, teta %f\n", phi, teta);
+
+    //aqui eu guardo a posição anterior do meu mouse
+    
+    //glutPostRedisplay(); //manda redesenhar a cena pra evitar lag (aquelas travadinhas)
 }
 
 void desenhaCena(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //limpa a tela com a cor definida e limpa o mapa de profundidade
     glLoadIdentity();  //carrega a matriz identidade do modelo de visualização, sempre utilize antes de usar LookAt
     
-    gluLookAt(local.x, local.y, local.z,   //onde a câmera  está
-              0, 0, 0,                     //pra onde a câmera tá olhando
-              0, 1, 0);                    //coordenada que ela gira
-    
+    //mudança de coordenadas retângular(a mais comum) para esféricas
+    local.x = 50 * sin(phi) * cos(teta);
+    local.z = 50 * sin(phi) * sin(teta);
+    local.y = 50 * cos(phi);
+
+    //printf("x=%f y=%f z=%f\n", local.x, local.y, local.z);
+
+    switch(modoCamera){
+        case 2:
+            gluLookAt(centro.x, centro.y, centro.z,
+                      local.x+centro.x, local.y, local.z+centro.z,
+                      0, 1, 0);
+            break;
+        case 3:
+            gluLookAt(local.x+centro.x, local.y, local.z+centro.z,
+                      centro.x, centro.y, centro.z,
+                      0, 1, 0);
+            break;
+        default:
+            gluLookAt(cameraFixa.x, cameraFixa.y, cameraFixa.z,   //onde a câmera  está
+                      0, 0, 0,                     //pra onde a câmera tá olhando
+                      0, 1, 0);                    //coordenada que ela gira
+    }
+
     desenhaObjeto(rodaM, "objetos/rodax.obj", roda);
+    //desenhaObjeto(rodaM, "objetos/rodax.obj", roda);
     
     glutSwapBuffers();     //SwapBuffers funciona como o Flush, mas para o modo de buffer duplo
 }
 
+
 void inicializa() {
     
     srand(time(0));
-    glClearColor(0, 0, 0, 0);   //cor de fundo preto
+    glClearColor(0.176, 0.176, 0.176, 0);   //cor de fundo preto
     // habilita mesclagem de cores, para termos suporte a texturas com transparência
     glEnable(GL_BLEND );
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  //para poder criar objetos transparentes
 
-    local.x = 0;
-    local.y = 0;
-    local.z = 20;
+    centro.x = centro.y = centro.z = 0;
+    mouse.x = mouse.y = mouse.z = 0;
+    phi = 90;
+    teta = 0;
 
-    roda.x = 5;
-    roda.y = 5;
-    roda.z = 0;
+    cameraFixa.x = 0;
+    cameraFixa.y = 10;
+    cameraFixa.z = 70;  //maior que o raio da minha esfera
 
-    keyStates[1] = true;
+    roda.x = 0;
+    roda.y = 0;
+    roda.z = 2;
 }
 
 void redimensiona(int width, int height) {
@@ -81,16 +129,32 @@ void teclado(unsigned char key, int x, int y) {
         case 27:    //esc
             exit(0);
             break;
-        case 1:     //câmera que tem visão de cima/diagonal
-            local.x = 0;
-            local.y = 0;
-            local.z = 20;
+        case '1':     //câmera que tem visão de cima/diagonal
+            modoCamera = 1;
+            break;
+        case '2':   //camêra em primeira pessoa
+            modoCamera = 2;
+            break;
+        case '3':   //camêra em terceira pessoa
+            modoCamera = 3;
             break;
         //câmera que tem visão de cada brinquedo
         case 'r':   //roller coaster (montanha-russa)
             local.x = 5;
-            local.y = 5;
+            local.y = 0;
             local.z = 0;
+            break;
+        case 'w':
+            centro.x ++;
+            break;
+        case 's':
+            centro.x --;
+            break;
+        case 'a':
+            centro.z ++;
+            break;
+        case 'd':
+            centro.z --;
             break;
     }
 }
@@ -107,7 +171,7 @@ int main(int argc, char** argv) {
     
     glutInit(&argc, argv);
 
-    //glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);   //para o que serve?
+    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);   //configuração interna do opengl relativa à versões
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(1000, 600);
@@ -121,7 +185,8 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(teclado);
   //glutKeyboardUpFunc(teclaLiberada);      //caso eu queira mudar tal estado assim que a pessoa soltar a tecla (keyboard[key] = false;)
 
-    glutTimerFunc(0, atualizaCena, 33);
+    glutTimerFunc(0, atualizaCena, 10);
+    glutPassiveMotionFunc(posicionaCamera);
 
     inicializa();
 
