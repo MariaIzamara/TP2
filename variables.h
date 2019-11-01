@@ -22,15 +22,14 @@ typedef struct {
     //GLfloat brilhosidade[1];
 } iluminacao;
 
-iluminacao luzC = { {1.0, 1.0, 1.0, 1.0},
-                    {1.0, 1.0, 1.0, 1.0},
-                    {0.5, 0.5, 0.5, 0.5},
-                    {1.0, 1.0, 1.0, 1.0} 
-                    {cameraFixa.x, cameraFixa.y, cameraFixa.z, 0}};
+iluminacao luzC = { {0.37, 0.37, 0.37, 1.0},
+                    {0.37, 0.37, 0.37, 1.0},
+                    {0.37, 0.37, 0.37, 1.0},
+                    {2.0, 0.37, 0.37, 0.0} };
 
 /*
-iluminacao materialC = { {0.7f, 0.7f, 0.7f, 1.0f},
-                         {0.8f, 0.8f, 0.8f, 1.0f},
+iluminacao materialC = { {0.7f, 0.7f, 0.7f, 1},
+                         {0.8f, 0.8f, 0.8f, 1},
                          {1.0f, 1.0f, 1.0f, 1.0f} };
                 
 iluminacao brilhoC = { {}, {}, {}, {}, {}, {100.0f}};
@@ -39,8 +38,8 @@ iluminacao brilhoC = { {}, {}, {}, {}, {}, {100.0f}};
 int modoCamera = 1; //modo padrão
 float theta = 0, phi = 90; //tipo no 2D
 
-//verifica se a luz está ou não acessa
-bool luz = true;
+//variáveis para verificação
+bool luz = true, nevoa = true;
 
 //GLuint idTexturaGrama; // imagem da grama
 
