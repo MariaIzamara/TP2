@@ -8,7 +8,6 @@
 #include <time.h>
 #include <unistd.h>
 #include <math.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include "glm.h"
-
-//#include <SDL2/SDL.h>
-//#include <SDL2/SDL_mixer.h>

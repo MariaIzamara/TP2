@@ -30,43 +30,37 @@ void desenhaObjeto(GLMmodel* objeto, char* string, coordenadas coordenada, coord
         }
     glPushMatrix();
     glTranslatef(coordenada.x, coordenada.y, coordenada.z);
-    glScalef(tamanho.x, tamanho.y, tamanho.z); //escala dentro de uma matriz
+    glScalef(tamanho.x, tamanho.y, tamanho.z); //escala dentro de uma matriz de transformação
     glmDraw(objeto, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
     glPopMatrix();    
 }
 
 void posicionaCamera(int x, int y){ 
-    vetor.x = (GLfloat)x - mouse.x; //vetor é o Pfinal - Pinicial;
-    vetor.y = (GLfloat)y - mouse.y;
 
-    mouse.x = x;
-    mouse.y = y;
+    //(x - mouse.x) e (y - mouse.y) são os vetores formados pelo ponto onde eu estava com o mouse e o novo local.
+    theta += (x - mouse.x)/40.0;
+    phi -= (y - mouse.y)/40.0;
 
     if(phi>=180)
         phi=180;
 
-    //printf("deltaX = %f deltaY = %f \n", vetor.x, vetor.y);
-
-    teta += vetor.x/40.0;
-    phi -= vetor.y/40.0;
-
-    //printf("phi %f, teta %f\n", phi, teta);
-
     //aqui eu guardo a posição anterior do meu mouse
+    mouse.x = x;
+    mouse.y = y;
     
-    //glutPostRedisplay(); //manda redesenhar a cena pra evitar lag (aquelas travadinhas)
+    glutPostRedisplay(); //manda redesenhar a cena pra evitar lag (aquelas travadinhas)
 }
 
 void desenhaCena(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //limpa a tela com a cor definida e limpa o mapa de profundidade
     glLoadIdentity();  //carrega a matriz identidade do modelo de visualização, sempre utilize antes de usar LookAt
     
-    //mudança de coordenadas retângular(a mais comum) para esféricas
-    local.x = 50 * sin(phi) * cos(teta);
-    local.z = 50 * sin(phi) * sin(teta);
-    local.y = 50 * cos(phi);
+    //mudança de coordenadas retangular(a mais comum) para esféricas, com raio = 100
+    local.x = 100 * sin(phi) * cos(theta);
+    local.z = 100 * sin(phi) * sin(theta);
+    local.y = 100 * cos(phi);
 
-    //printf("x=%f y=%f z=%f\n", local.x, local.y, local.z);
+    //glLightfv(GL_LIGHT0, GL_POSITION, sol.posicao);
 
     switch(modoCamera){
         case 2:
@@ -86,8 +80,8 @@ void desenhaCena(){
     }
 
     desenhaObjeto(chaoO, "objetos/floor.obj", chaoL, chaoT);
-    desenhaObjeto(terraO, "objetos/tree.obj", terraL, terraT);
-    //desenhaObjeto(arvoreO, "objetos/tree.obj", arvoreL, arvoreT);
+    desenhaObjeto(arvoreO, "objetos/tree.obj", arvoreL, arvoreT);
+    //desenhaObjeto(terraO, "objetos/tree.obj", terraL, terraT);1
     
     glutSwapBuffers();     //SwapBuffers funciona como o Flush, mas para o modo de buffer duplo
 }
@@ -97,14 +91,36 @@ void inicializa() {
     
     srand(time(0));
     glClearColor(0.176, 0.176, 0.176, 0);   //cor de fundo preto
+
     // habilita mesclagem de cores, para termos suporte a texturas com transparência
     glEnable(GL_BLEND );
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  //para poder criar objetos transparentes
 
+/*
+    float corFog[3] = {0.6,0.6,0.6};
+    glEnable(GL_FOG);
+    glFogfv(GL_FOG_COLOR, corFog);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogf(GL_FOG_START, 16.0);
+    glFogf(GL_FOG_END, 30.0);
+*/
+
+    //inicializa a musica
+    Mix_ResumeMusic();
+
+    //começo meu jogo com iluminação
+    glEnable(GL_LIGHTING);
+    //glLightMaterialfv (GL_LIGHT_MODEL_AMBIENT, 1.0f);  //luz ambiente global que é usada para iluminar uniformemente todos os objetos da cena
+
+    glLightfv(GL_LIGHTING, GL_AMBIENT, luzC.ambiente);
+    glLightfv(GL_LIGHTING, GL_DIFFUSE, luzC.difusa);
+    glLightfv(GL_LIGHTING, GL_SPECULAR, luzC.especular);
+    glLightfv(GL_LIGHTING, GL_POSITION, luzC.posicao);
+
     centro.x = centro.y = centro.z = 0;
     mouse.x = mouse.y = mouse.z = 0;
     phi = 90;
-    teta = 0;
+    theta = 0;
 
     cameraFixa.x = 0;
     cameraFixa.y = 60;
@@ -122,9 +138,9 @@ void inicializa() {
 
     terraT.x = terraT.y = terraT.z = 5;
 
-    arvoreL.x = 0;
+    arvoreL.x = 5;
     arvoreL.y = 0;
-    arvoreL.z = 2;
+    arvoreL.z = 5;
 
     arvoreT.x = arvoreT.y = arvoreT.z = 10;
 }
@@ -135,7 +151,7 @@ void redimensiona(int width, int height) {
     glViewport (0, 0, width, height);    //define a proporção da janela de visualização
     glMatrixMode (GL_PROJECTION);        //define o tipo de matriz de transformação que será utilizada
     glLoadIdentity();                    //carrega a matriz identidade do tipo GL_PROJECTION configurado anteriormente
-    gluPerspective(90, (float)width/(float)height, 0.2, 200.0);   //funciona como se fosse o glOrtho, mas para o espaço 3D
+    gluPerspective(90, (float)width/(float)height, 0.2, 400.0);   //funciona como se fosse o glOrtho, mas para o espaço 3D
     glMatrixMode(GL_MODELVIEW);                                   //ativa o modo de matriz de visualização para utilizar o LookAt
 }
 
@@ -146,7 +162,7 @@ void teclado(unsigned char key, int x, int y) {
             break;
         case '1':     //câmera que tem visão de cima/diagonal
             modoCamera = 1;
-            cameraFixa.x = -10;
+            cameraFixa.x = 0;
             cameraFixa.y = 60;
             cameraFixa.z = 100;
             break;
@@ -159,21 +175,35 @@ void teclado(unsigned char key, int x, int y) {
         //câmera que tem visão de cada brinquedo
         case 'r':   //roller coaster (montanha-russa)
             modoCamera = 1;
-            arvoreL.x = 0;
-            arvoreL.y = 0;
-            arvoreL.z = 2;
+            cameraFixa.x = 0;
+            cameraFixa.y = 10;
+            cameraFixa.z = 30;
             break;
         case 'w':
-            centro.x ++;
+            centro.x += 0.5;
             break;
         case 's':
-            centro.x --;
+            centro.x -= 0.5;
             break;
         case 'a':
-            centro.z ++;
+            centro.z += 0.5;
             break;
         case 'd':
-            centro.z --;
+            centro.z -= 0.5;
+            break;
+        case 'l':
+            if(luz)
+            {
+                glDisable(GL_LIGHTING);
+                luz = false;
+            }
+            else
+            {
+                glEnable(GL_LIGHTING);
+                luz = true;
+            }
+            break;
+        default:
             break;
     }
 }
@@ -196,7 +226,14 @@ int main(int argc, char** argv) {
     glutInitWindowSize(1000, 600);
     glutInitWindowPosition(170, 70);
     glutCreateWindow("Haunted Park");
-    
+
+    //configurações para colocar música
+    Mix_OpenAudio(40100, MIX_DEFAULT_FORMAT, 2, 2000);
+                //(frequencia, formato, canal, tamanho)
+    Mix_PlayChannel(-1, Mix_LoadWAV("sounds/suspense.wav"), 1);
+                //(canal, carrega formatos WAV, loop)
+    Mix_Volume(-1, MIX_MAX_VOLUME);
+            //(canal, volume) - se eu dividir o MIX_MAX_VOLUME eu vou diminuindo o som
 
     glutDisplayFunc(desenhaCena);    
     glutReshapeFunc(redimensiona);
