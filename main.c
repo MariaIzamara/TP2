@@ -18,7 +18,7 @@ GLuint carregaTextura(const char* arquivo) {
 }
 
 
-void desenhaObjeto(GLMmodel* objeto, char* string, coordenadas coordenada){
+void desenhaObjeto(GLMmodel* objeto, char* string, coordenadas coordenada, coordenadas tamanho){
     if(objeto == NULL){
             objeto = glmReadOBJ(string);    //manda pro objeto sua localização
             if(!objeto)
@@ -30,7 +30,7 @@ void desenhaObjeto(GLMmodel* objeto, char* string, coordenadas coordenada){
         }
     glPushMatrix();
     glTranslatef(coordenada.x, coordenada.y, coordenada.z);
-    glScalef(5, 5, 5); //escala dentro de uma matriz
+    glScalef(tamanho.x, tamanho.y, tamanho.z); //escala dentro de uma matriz
     glmDraw(objeto, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
     glPopMatrix();    
 }
@@ -50,7 +50,7 @@ void posicionaCamera(int x, int y){
     teta += vetor.x/40.0;
     phi -= vetor.y/40.0;
 
-    printf("phi %f, teta %f\n", phi, teta);
+    //printf("phi %f, teta %f\n", phi, teta);
 
     //aqui eu guardo a posição anterior do meu mouse
     
@@ -79,14 +79,15 @@ void desenhaCena(){
                       centro.x, centro.y, centro.z,
                       0, 1, 0);
             break;
-        default:
+        default:    //modoCamera = 1;
             gluLookAt(cameraFixa.x, cameraFixa.y, cameraFixa.z,   //onde a câmera  está
                       0, 0, 0,                     //pra onde a câmera tá olhando
                       0, 1, 0);                    //coordenada que ela gira
     }
 
-    desenhaObjeto(rodaM, "objetos/rodax.obj", roda);
-    //desenhaObjeto(rodaM, "objetos/rodax.obj", roda);
+    desenhaObjeto(chaoO, "objetos/floor.obj", chaoL, chaoT);
+    desenhaObjeto(terraO, "objetos/tree.obj", terraL, terraT);
+    //desenhaObjeto(arvoreO, "objetos/tree.obj", arvoreL, arvoreT);
     
     glutSwapBuffers();     //SwapBuffers funciona como o Flush, mas para o modo de buffer duplo
 }
@@ -106,12 +107,26 @@ void inicializa() {
     teta = 0;
 
     cameraFixa.x = 0;
-    cameraFixa.y = 10;
-    cameraFixa.z = 70;  //maior que o raio da minha esfera
+    cameraFixa.y = 60;
+    cameraFixa.z = 100;  //maior que o raio da minha esfera
 
-    roda.x = 0;
-    roda.y = 0;
-    roda.z = 2;
+    chaoL.x = 0;
+    chaoL.y = 0;
+    chaoL.z = 2;
+
+    chaoT.x = chaoT.y = chaoT.z = 60;
+    
+    terraL.x = 0;
+    terraL.y = 0.1;
+    terraL.z = 2;
+
+    terraT.x = terraT.y = terraT.z = 5;
+
+    arvoreL.x = 0;
+    arvoreL.y = 0;
+    arvoreL.z = 2;
+
+    arvoreT.x = arvoreT.y = arvoreT.z = 10;
 }
 
 void redimensiona(int width, int height) {
@@ -120,7 +135,7 @@ void redimensiona(int width, int height) {
     glViewport (0, 0, width, height);    //define a proporção da janela de visualização
     glMatrixMode (GL_PROJECTION);        //define o tipo de matriz de transformação que será utilizada
     glLoadIdentity();                    //carrega a matriz identidade do tipo GL_PROJECTION configurado anteriormente
-    gluPerspective(90, (float)width/(float)height, 0.5, 200.0);   //funciona como se fosse o glOrtho, mas para o espaço 3D
+    gluPerspective(90, (float)width/(float)height, 0.2, 200.0);   //funciona como se fosse o glOrtho, mas para o espaço 3D
     glMatrixMode(GL_MODELVIEW);                                   //ativa o modo de matriz de visualização para utilizar o LookAt
 }
 
@@ -131,6 +146,9 @@ void teclado(unsigned char key, int x, int y) {
             break;
         case '1':     //câmera que tem visão de cima/diagonal
             modoCamera = 1;
+            cameraFixa.x = -10;
+            cameraFixa.y = 60;
+            cameraFixa.z = 100;
             break;
         case '2':   //camêra em primeira pessoa
             modoCamera = 2;
@@ -140,9 +158,10 @@ void teclado(unsigned char key, int x, int y) {
             break;
         //câmera que tem visão de cada brinquedo
         case 'r':   //roller coaster (montanha-russa)
-            local.x = 5;
-            local.y = 0;
-            local.z = 0;
+            modoCamera = 1;
+            arvoreL.x = 0;
+            arvoreL.y = 0;
+            arvoreL.z = 2;
             break;
         case 'w':
             centro.x ++;
