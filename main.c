@@ -90,20 +90,13 @@ void desenhaCena(){
 void inicializa() {
     
     srand(time(0));
-    glClearColor(0.176, 0.176, 0.176, 0);   //cor de fundo preto
+    //glClearColor(0.176, 0.176, 0.176, 0);   //cor de fundo preto
+
+    glClearColor(0, 0, 0, 0);
 
     // habilita mesclagem de cores, para termos suporte a texturas com transparência
     glEnable(GL_BLEND );
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  //para poder criar objetos transparentes
-
-/*
-    float corFog[3] = {0.6,0.6,0.6};
-    glEnable(GL_FOG);
-    glFogfv(GL_FOG_COLOR, corFog);
-    glFogi(GL_FOG_MODE, GL_LINEAR);
-    glFogf(GL_FOG_START, 16.0);
-    glFogf(GL_FOG_END, 30.0);
-*/
 
     //inicializa a musica
     Mix_ResumeMusic();
@@ -117,14 +110,28 @@ void inicializa() {
     glLightfv(GL_LIGHTING, GL_SPECULAR, luzC.especular);
     glLightfv(GL_LIGHTING, GL_POSITION, luzC.posicao);
 
+
+    float corNevoa[3] = {0.6, 0.6, 0.6};
+/*
+    //começo meu jogo com névoa
+    glEnable(GL_FOG);
+
+    glFogfv(GL_FOG_COLOR, corNevoa);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogf(GL_FOG_START, 5.0);  //onde começa o nevoeiro, a distância inicial começa em 0 (near)
+    glFogf(GL_FOG_END, 16.0);    //onde termina o nevoeiro, a distância inicial começa em 1 (far)
+    //GL_FOG_DENSITY(GL_FOG, 10);
+*/
+
+
     centro.x = centro.y = centro.z = 0;
     mouse.x = mouse.y = mouse.z = 0;
     phi = 90;
     theta = 0;
 
-    cameraFixa.x = 0;
-    cameraFixa.y = 60;
-    cameraFixa.z = 100;  //maior que o raio da minha esfera
+    cameraFixa.x = 10;
+    cameraFixa.y = 30;
+    cameraFixa.z = 50;  //maior que o raio da minha esfera
 
     chaoL.x = 0;
     chaoL.y = 0;
@@ -192,8 +199,7 @@ void teclado(unsigned char key, int x, int y) {
             centro.z -= 0.5;
             break;
         case 'l':
-            if(luz)
-            {
+            if(luz) {
                 glDisable(GL_LIGHTING);
                 luz = false;
             }
@@ -201,6 +207,16 @@ void teclado(unsigned char key, int x, int y) {
             {
                 glEnable(GL_LIGHTING);
                 luz = true;
+            }
+            break;
+        case 'n':
+            if(nevoa) {
+                glDisable(GL_FOG);
+                nevoa = false;
+            }
+            else {
+                glEnable(GL_FOG);
+                nevoa = true;
             }
             break;
         default:
