@@ -1,0 +1,12 @@
+# Blender MTL File: 'torre.blend'
+# Material Count: 1
+
+newmtl Yellow
+Ns 96.078431
+Ka 1.400000 1.400000 1.400000
+Kd 0.101950 0.000971 0.000486
+Ks 0.500000 0.500000 0.500000
+Ke 0.012744 0.000121 0.000061
+Ni 1.000000
+d 1.000000
+illum 2
