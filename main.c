@@ -260,7 +260,7 @@ void desenhaCena(){
         //desenhaObjeto(caminhoO, "objects/spinner/spinner.obj", caminhoL, caminhoT);
 
         //pedras perto da torre   
-        desenhaObjeto(pedraTorreO, "objects/torre/DropTower.obj", addTorreL, addTorreT);
+        desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
 
         //Roda Gigante
         desenhaRodaGigante(rodagiganteBaseO, rodagiganteRodaO,rodagiganteCarrinhoO,"objects/rodaGigante/base.obj", "objects/rodaGigante/roda.obj", 
