@@ -253,14 +253,21 @@ void desenhaCena(){
         else
             glEnable(GL_FOG);
 
-        desenhaObjeto(chaoO, "objects/chao/chao.obj", chaoL, chaoT);
+        desenhaObjeto(chaoO, "objects/floor/floor.obj", chaoL, chaoT);
+        //carros
+        desenhaObjeto(carroBrownO, "objects/car/carBrown.obj", carroBrownL, carroBrownT);
+        desenhaObjeto(carroBlueO, "objects/car/carBlue.obj", carroBlueL, carroBlueT);
+        desenhaObjeto(carroRedO, "objects/car/carRed.obj", carroRedL, carroRedT);
+        desenhaObjeto(carroGrayO, "objects/car/carGray.obj", carroGrayL, carroGrayT);
 
         //caminhos de terra
-        //desenhaObjeto(caminhoO, "objects/banco/banco.obj", caminhoL, caminhoT);
+        //desenhaObjeto(caminhoO, "objects/tree/paredeArvore.obj", caminhoL, caminhoT);
         //desenhaObjeto(caminhoO, "objects/spinner/spinner.obj", caminhoL, caminhoT);
 
+        //arvores
+        desenhaObjeto(paredeArvoreO, "objects/tree/paredeArvore.obj", paredeArvoreL, paredeArvoreT);
         //pedras perto da torre   
-        desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
+        //desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
 
         //Roda Gigante
         desenhaRodaGigante(rodagiganteBaseO, rodagiganteRodaO,rodagiganteCarrinhoO,"objects/rodaGigante/base.obj", "objects/rodaGigante/roda.obj", 
@@ -356,15 +363,45 @@ void inicializa() {
     caminhoL.y = 2.5;
     caminhoL.z = -45;
 
-    caminhoT.x = 50;
-    caminhoT.y = 10;
-    caminhoT.z = 15;
+    caminhoT.x = 100;
+    caminhoT.y = 100;
+    caminhoT.z = 100;
+
+    paredeArvoreL.x = 52;
+    paredeArvoreL.y = 9;
+    paredeArvoreL.z = 20;
+
+    paredeArvoreT.x = paredeArvoreT.y = paredeArvoreT.z = 40; 
 
     bancoL.x = 40;
     bancoL.y = 0.3;
     bancoL.z = 44;
 
     bancoT.x = bancoT.y = bancoT.z = 20;
+
+    carroBrownL.x = 50; 
+    carroBrownL.y = 3;
+    carroBrownL.z = -55;
+
+    carroBrownT.x = carroBrownT.y = carroBrownT.z = 7;
+
+    carroBlueL.x = 50; 
+    carroBlueL.y = 3;
+    carroBlueL.z = -30.5;
+
+    carroBlueT.x = carroBlueT.y = carroBlueT.z = 8;
+
+    carroRedL.x = 23.7; 
+    carroRedL.y = 3;
+    carroRedL.z = -38.9;
+
+    carroRedT.x = carroRedT.y = carroRedT.z = 8;
+
+    carroGrayL.x = 23.7; 
+    carroGrayL.y = 3;
+    carroGrayL.z = -55;
+
+    carroGrayT.x = carroGrayT.y = carroGrayT.z = 8;
 
     //Pedras
     addTorreL.x = -32;
@@ -482,7 +519,7 @@ void redimensiona(int width, int height) {
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
             glOrtho(0, width, 0, height, -1, 1);
-            glMatrixMode(GL_MODELVIEW);
+            glMatrixMode(GL_MODELVIEW); //ativa o modo de matriz de visualização para utilizar o LookAt
             glLoadIdentity();
             break;
         case 1:
@@ -644,7 +681,7 @@ int main(int argc, char** argv) {
     //configurações para colocar música
     Mix_OpenAudio(35000, MIX_DEFAULT_FORMAT, 2, 2000);
                 //(frequencia, formato, canal, tamanho)
-    Mix_PlayChannel(-1, Mix_LoadWAV("sounds/teremim.wav"), 1); 
+    //Mix_PlayChannel(-1, Mix_LoadWAV("sounds/teremim.wav"), 1); 
     Mix_Volume(-1, MIX_MAX_VOLUME);
             //(canal, volume) - se eu dividir o MIX_MAX_VOLUME eu vou diminuindo o som
 

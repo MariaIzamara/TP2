@@ -12,10 +12,10 @@ coordenadas rodaGiganteL, torreL, spinnerL;
 coordenadas rodaGiganteT, torreT, spinnerT;
 
 //Localização dos objetos
-coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL;
+coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, paredeArvoreL;
 
 //Tamanho dos objetos
-coordenadas chaoT, terraT, addTorreT, entradaT, bancoT, caminhoT;
+coordenadas chaoT, terraT, addTorreT, entradaT, bancoT, caminhoT, carroBrownT, carroRedT, carroGrayT, carroBlueT, paredeArvoreT;
 
 //configura alguns parâmetros do modelo de iluminação
 typedef struct {
@@ -91,7 +91,11 @@ GLMmodel* rodagiganteRodaO = NULL;
 GLMmodel* rodagiganteCarrinhoO = NULL;
 GLMmodel* torreBaseO = NULL;
 GLMmodel* torreCarrinhoO = NULL;
-GLMmodel* spinnerO = NULL;
+GLMmodel* carroBrownO = NULL;
+GLMmodel* carroBlueO = NULL;
+GLMmodel* carroRedO = NULL;
+GLMmodel* carroGrayO = NULL;
+GLMmodel* paredeArvoreO = NULL;
 
 #define AumentoAngulo_RodaGigante 1
 #define AumentoAngulo_Carrossel 0,05
