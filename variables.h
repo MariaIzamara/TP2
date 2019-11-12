@@ -6,10 +6,10 @@ typedef struct {
 coordenadas cameraFixa, cameraOlha, local,  centro, mouse, vetor;
 
 //Localização dos brinquedos
-coordenadas rodaGiganteL, torreL, spinnerL;
+coordenadas rodaGiganteL, torreL, carrosselL;
 
 //Tamanho dos brinquedos
-coordenadas rodaGiganteT, torreT, spinnerT;
+coordenadas rodaGiganteT, torreT, carrosselT;
 
 //Localização dos objetos
 coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, paredeArvoreL;
@@ -66,6 +66,7 @@ float corMaterial[3] = {0.2, 0.2, 0.2};
 //brinquedos
 //Roda Gigante
 float anguloRodaGigante = 0;
+float anguloCarrossel = 0;
 //Torre de Queda
 int permisaoSubir = 0, permisaoDescer = 0, aguardaEmBaixo = 1, aguardaEmCima = 0;
 float alturaTorre = -7.8;
@@ -91,6 +92,8 @@ GLMmodel* rodagiganteRodaO = NULL;
 GLMmodel* rodagiganteCarrinhoO = NULL;
 GLMmodel* torreBaseO = NULL;
 GLMmodel* torreCarrinhoO = NULL;
+GLMmodel* carrosselBaseO = NULL;
+GLMmodel* carrosselCorpoO = NULL;
 GLMmodel* carroBrownO = NULL;
 GLMmodel* carroBlueO = NULL;
 GLMmodel* carroRedO = NULL;
