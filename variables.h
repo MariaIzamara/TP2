@@ -12,10 +12,10 @@ coordenadas rodaGiganteL, torreL, carrosselL;
 coordenadas rodaGiganteT, torreT, carrosselT;
 
 //Localização dos objetos
-coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, paredeArvoreL;
+coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, paredeArvoreL, paredeArvore2L;
 
 //Tamanho dos objetos
-coordenadas chaoT, terraT, addTorreT, entradaT, bancoT, caminhoT, carroBrownT, carroRedT, carroGrayT, carroBlueT, paredeArvoreT;
+coordenadas chaoT, terraT, addTorreT, entradaT, bancoT, caminhoT, carroBrownT, carroRedT, carroGrayT, carroBlueT, paredeArvoreT, paredeArvore2T;
 
 //configura alguns parâmetros do modelo de iluminação
 typedef struct {
