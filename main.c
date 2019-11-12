@@ -69,6 +69,12 @@ void acrescentarAngulos(){
         anguloRodaGigante = 0;
     else
         anguloRodaGigante += 0.5;
+
+    //arruma o angulo do carrossel
+    if(anguloCarrossel >= 360)
+        anguloCarrossel = 0;
+    else
+        anguloCarrossel += 1;
 }
 
 void desenhaRodaGigante(GLMmodel* objeto1, GLMmodel* objeto2, GLMmodel* objeto3, char* string1, char* string2, char* string3, coordenadas coordenada, coordenadas tamanho){
@@ -117,6 +123,38 @@ void desenhaRodaGigante(GLMmodel* objeto1, GLMmodel* objeto2, GLMmodel* objeto3,
                 glmDraw(objeto3, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
                 glPopMatrix();
             }
+        glPopMatrix();
+    glPopMatrix();
+}
+
+void desenhaCarrossel(GLMmodel* objeto1, GLMmodel* objeto2, char* string1, char* string2, coordenadas coordenada, coordenadas tamanho){
+    if(objeto1 == NULL){
+        objeto1 = glmReadOBJ(string1);    
+        if(!objeto1)
+            exit(0);
+        glmScale(objeto1, 90.0); 
+        glmUnitize(objeto1);
+        glmFacetNormals(objeto1);
+        glmVertexNormals(objeto1, 90.0, 1); 
+    }
+    if(objeto2 == NULL){
+        objeto2 = glmReadOBJ(string2);    
+        if(!objeto2)
+            exit(0);
+        glmScale(objeto2, 90.0); 
+        glmUnitize(objeto2);
+        glmFacetNormals(objeto2);
+        glmVertexNormals(objeto2, 90.0, 1);  
+    }
+    glPushMatrix();
+        glTranslatef(coordenada.x, coordenada.y, coordenada.z);
+        glScalef(tamanho.x, tamanho.y, tamanho.z);
+        glmDraw(objeto1, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
+        glPushMatrix();
+            glTranslatef(0, -0.2, 0);
+            glRotatef(anguloCarrossel, 0, -1, 0);
+            glScalef(0.8, 0.8, 0.8);
+            glmDraw(objeto2, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
         glPopMatrix();
     glPopMatrix();
 }
@@ -267,9 +305,11 @@ void desenhaCena(){
         //arvores
         desenhaObjeto(paredeArvoreO, "objects/tree/paredeArvore.obj", paredeArvoreL, paredeArvoreT);
 
+
         glRotatef(90, 0, 1, 0);   // [anguloRotacao, x, y, z] no caso eu giro tantos graus no eixo z.
         desenhaObjeto(paredeArvoreO, "objects/tree/natureza.obj", paredeArvore2L, paredeArvore2T);
         glRotatef(-90, 0, 1, 0);   // [anguloRotacao, x, y, z] no caso eu giro tantos graus no eixo z.
+
         //pedras perto da torre   
         //desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
 
@@ -278,8 +318,9 @@ void desenhaCena(){
                             "objects/rodaGigante/carrinho.obj", rodaGiganteL, rodaGiganteT);
         //Torre de Queda
         desenhaTorre(torreBaseO, torreCarrinhoO, "objects/torre/torre.obj", "objects/torre/carrinho.obj", torreL, torreT);
+
         //Spinner
-        //desenhaObjeto(spinnerO, "objects/arvores/arvoreMortaPedras.obj", spinnerL, spinnerT);
+        desenhaCarrossel(carrosselBaseO, carrosselCorpoO, "objects/carrossel/carrosselBase.obj", "objects/carrossel/carrosselCorpo.obj", carrosselL, carrosselT);
     }
     
     glutSwapBuffers();     //SwapBuffers funciona como o Flush, mas para o modo de buffer duplo
@@ -435,10 +476,10 @@ void inicializa() {
     torreT.y = 25;
 
     //Spinner
-    spinnerL.x = -20;
-    spinnerL.y = 17;
-    spinnerL.z = -20;
-    spinnerT.x = spinnerT.y = spinnerT.z = 20;
+    carrosselL.x = -20;
+    carrosselL.y = 17;
+    carrosselL.z = -20;
+    carrosselT.x = carrosselT.y = carrosselT.z = 20;
 }
 
 void detectaMouse(int x, int y){ 
