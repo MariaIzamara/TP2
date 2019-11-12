@@ -418,9 +418,9 @@ void inicializa() {
 
     paredeArvoreT.x = paredeArvoreT.y = paredeArvoreT.z = 40; 
 
-    paredeArvore2L.x = -10;
+    paredeArvore2L.x = -15;
     paredeArvore2L.y = 15;
-    paredeArvore2L.z = 0;
+    paredeArvore2L.z = -5;
 
     paredeArvore2T.x = paredeArvore2T.y = paredeArvore2T.z = 40; 
 
