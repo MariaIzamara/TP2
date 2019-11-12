@@ -12,10 +12,10 @@ coordenadas rodaGiganteL, torreL, carrosselL;
 coordenadas rodaGiganteT, torreT, carrosselT;
 
 //Localização dos objetos
-coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, paredeArvoreL, paredeArvore2L;
+coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, paredeArvoreL, paredeArvore2L, caminhoQL, caminhoCL, caminhoRL, banco4L, poste4L;
 
 //Tamanho dos objetos
-coordenadas chaoT, terraT, addTorreT, entradaT, bancoT, caminhoT, carroBrownT, carroRedT, carroGrayT, carroBlueT, paredeArvoreT, paredeArvore2T;
+coordenadas chaoT, terraT, addTorreT, entradaT, bancoT, caminhoT, carroBrownT, carroRedT, carroGrayT, carroBlueT, paredeArvoreT, paredeArvore2T, caminhoQT, caminhoCT, caminhoRT, banco4T, poste4T;
 
 //configura alguns parâmetros do modelo de iluminação
 typedef struct {
@@ -29,10 +29,10 @@ typedef struct {
 } iluminacao;
 
 
-iluminacao luzC = { {0.0, 0.5, 0.0, 1.0},
+iluminacao luzC = { {1.0, 1, 1.0, 1.0},
                     {0.5, 0.5, 0.5, 1.0},
                     {1.0, 1.0, 1.0, 1.0},
-                    {0.0, 0.0, 0.0, 1.0} };
+                    {0.0, 20.0, 0.0, 1.0} };
 
 /*
 iluminacao materialC = { {0.7f, 0.7f, 0.7f, 1},
@@ -56,10 +56,11 @@ telas park, instructions, credits, exits, back;
 bool luz = false, nevoa = false, som = true;
 
 int modoCamera = 1; //modo padrão
-int tela = 0;    //variável que me diz em qual tela estou
+int tela = 1;    //variável que me diz em qual tela estou
 int mundoW, mundoH;  //variáveis que guardam a altura e largura do meu mundo
 float theta, phi; //tipo no 2D
 float volume;   //controla o volume da música
+int brinquedoAtual = 0;
 
 float corNevoa[3] = {0.176, 0.176, 0.176};
 float corMaterial[3] = {1, 1, 1};
@@ -102,6 +103,11 @@ GLMmodel* carroRedO = NULL;
 GLMmodel* carroGrayO = NULL;
 GLMmodel* paredeArvoreO = NULL;
 GLMmodel* paredeArvore2O = NULL;
+GLMmodel* caminhoQO = NULL;
+GLMmodel* caminhoCO = NULL;
+GLMmodel* caminhoRO = NULL;
+GLMmodel* banco4O = NULL;
+GLMmodel* poste4O = NULL;
 
 #define AumentoAngulo_RodaGigante 1
 #define AumentoAngulo_Carrossel 0,05

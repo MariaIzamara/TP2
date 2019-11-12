@@ -68,13 +68,13 @@ void acrescentarAngulos(){
     if(anguloRodaGigante >= 360)
         anguloRodaGigante = 0;
     else
-        anguloRodaGigante += 0.5;
+        anguloRodaGigante += 0.9;
 
     //arruma o angulo do carrossel
     if(anguloCarrossel >= 360)
         anguloCarrossel = 0;
     else
-        anguloCarrossel += 1;
+        anguloCarrossel += 1.9;
 }
 
 void desenhaRodaGigante(GLMmodel* objeto1, GLMmodel* objeto2, GLMmodel* objeto3, char* string1, char* string2, char* string3, coordenadas coordenada, coordenadas tamanho){
@@ -107,6 +107,7 @@ void desenhaRodaGigante(GLMmodel* objeto1, GLMmodel* objeto2, GLMmodel* objeto3,
     }
     glPushMatrix();
     glTranslatef(coordenada.x, coordenada.y, coordenada.z);
+    glRotatef(45, 0, 1, 0);
     glScalef(tamanho.x, tamanho.y, tamanho.z);
     glmDraw(objeto1, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
         //como os outros dois obj vão estar dentro do primeiro push, meus translate e rotate estarão de acordo com o do obj1
@@ -118,8 +119,8 @@ void desenhaRodaGigante(GLMmodel* objeto1, GLMmodel* objeto2, GLMmodel* objeto3,
         glRotatef(-anguloRodaGigante, 0, 0, 1); 
             for(int t=0; t<8; t++) {
                 glPushMatrix();
-                glScalef(0.2, 0.2, 0.2); //proporcional a escala do objeto1
-                glTranslatef(4 * cos(anguloRodaGigante*M_PI/180 + t*M_PI/4), -4 * sin(anguloRodaGigante*M_PI/180 + t*M_PI/4), 0);
+                glScalef(0.17, 0.17, 0.17); //proporcional a escala do objeto1
+                glTranslatef(4.7 * cos(anguloRodaGigante*M_PI/180 + t*M_PI/4), -4.7 * sin(anguloRodaGigante*M_PI/180 + t*M_PI/4), 0);
                 glmDraw(objeto3, GLM_SMOOTH | GLM_TEXTURE | GLM_COLOR);
                 glPopMatrix();
             }
@@ -161,7 +162,7 @@ void desenhaCarrossel(GLMmodel* objeto1, GLMmodel* objeto2, char* string1, char*
 
 void acrescentarAltura(){
     if(aguardaEmBaixo) {
-        if(tempo < 80)
+        if(tempo < 50)
             tempo ++;
         else {
             tempo = 0;
@@ -171,14 +172,14 @@ void acrescentarAltura(){
     }
     if(permisaoSubir) {
         if(alturaTorre < 5.5)
-            alturaTorre += 0.05;
+            alturaTorre += 0.13;
         else {
             aguardaEmCima = 1;
             permisaoSubir = 0;
         }
     }
     if(aguardaEmCima) {
-        if(tempo < 100)
+        if(tempo < 70)
             tempo ++;
         else {
             tempo = 0;
@@ -188,7 +189,7 @@ void acrescentarAltura(){
     }
     if(permisaoDescer) {
         if(alturaTorre > -7.3)
-            alturaTorre -= 0.4;
+            alturaTorre -= 0.6;
         else {
             aguardaEmBaixo = 1;
             permisaoDescer = 0;
@@ -285,26 +286,29 @@ void desenhaCena(){
         desenhaObjeto(carroRedO, "objects/car/carRed.obj", carroRedL, carroRedT);
         desenhaObjeto(carroGrayO, "objects/car/carGray.obj", carroGrayL, carroGrayT);
 
-        //caminhos de terra
-        //desenhaObjeto(caminhoO, "objects/spinner/spinner.obj", caminhoL, caminhoT);
-
-         //arvores
-        desenhaObjeto(paredeArvoreO, "objects/tree/paredeArvore.obj", paredeArvoreL, paredeArvoreT);
-
-        
-        glRotatef(90, 0, 1, 0);   // [anguloRotacao, x, y, z] no caso eu giro tantos graus no eixo z.
-        desenhaObjeto(paredeArvoreO, "objects/tree/natureza.obj", paredeArvore2L, paredeArvore2T);
-        glRotatef(-90, 0, 1, 0);   // [anguloRotacao, x, y, z] no caso eu giro tantos graus no eixo z.
-
         //arvores
-        desenhaObjeto(paredeArvore2O, "objects/barco/barco.obj", paredeArvoreL, paredeArvoreT);
+        //desenhaObjeto(paredeArvoreO, "objects/tree/paredeArvore.obj", paredeArvoreL, paredeArvoreT);
+
+        //caminhos
+        desenhaObjeto(caminhoQO, "objects/caminho/caminhoQ.obj", caminhoQL, caminhoQT);
+        desenhaObjeto(caminhoCO, "objects/caminho/caminhoC.obj", caminhoCL, caminhoCT);
+        desenhaObjeto(caminhoRO, "objects/caminho/caminhoR.obj", caminhoRL, caminhoRT);
+
+        //bancos
+        desenhaObjeto(banco4O, "objects/banco/banco4.obj", banco4L, banco4T);
+
+        //postes
+        desenhaObjeto(poste4O, "objects/poste/poste4.obj", poste4L, poste4T);
 
         //pedras perto da torre   
         //desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
 
         //Roda Gigante
+        
         desenhaRodaGigante(rodagiganteBaseO, rodagiganteRodaO,rodagiganteCarrinhoO,"objects/rodaGigante/base.obj", "objects/rodaGigante/roda.obj", 
                             "objects/rodaGigante/carrinho.obj", rodaGiganteL, rodaGiganteT);
+       
+
         //Torre de Queda
         desenhaTorre(torreBaseO, torreCarrinhoO, "objects/torre/torre.obj", "objects/torre/carrinho.obj", torreL, torreT);
 
@@ -404,27 +408,39 @@ void inicializa() {
 
     chaoL.x = chaoL.y = chaoL.z = 0;
     chaoT.x = chaoT.z = 60;
-    chaoT.y = 20;
+    chaoT.y = 100;
     
-    caminhoL.x = -25;
-    caminhoL.y = 2.5;
-    caminhoL.z = -45;
+    caminhoCL.x = -10;
+    caminhoCL.y = 1;
+    caminhoCL.z = 35;
+    caminhoCT.x = caminhoCT.y = 9;
+    caminhoCT.z = 25;
 
-    caminhoT.x = 100;
-    caminhoT.y = 100;
-    caminhoT.z = 100;
+    caminhoRL.x = 20;
+    caminhoRL.y = 1;
+    caminhoRL.z = -10;
+    caminhoRT.y = caminhoRT.z = 9;
+    caminhoRT.x = 39;
+
+    caminhoQL.x = -10;
+    caminhoQL.y = 1;
+    caminhoQL.z = -10;
+    caminhoQT.x = caminhoQT.y = caminhoQT.z = 20;
+
+    banco4L.x = -10;
+    banco4L.y = 3;
+    banco4L.z = -10;
+    banco4T.x = banco4T.y = banco4T.z = 17;
+
+    poste4L.x = -10;
+    poste4L.y = 7.5;
+    poste4L.z = -10;
+    poste4T.x = poste4T.y = poste4T.z = 15;
 
     paredeArvoreL.x = 52;
     paredeArvoreL.y = 9;
     paredeArvoreL.z = 20;
-
     paredeArvoreT.x = paredeArvoreT.y = paredeArvoreT.z = 40; 
-
-    paredeArvore2L.x = -10;
-    paredeArvore2L.y = 15;
-    paredeArvore2L.z = 0;
-
-    paredeArvore2T.x = paredeArvore2T.y = paredeArvore2T.z = 40; 
 
     bancoL.x = 40;
     bancoL.y = 0.3;
@@ -463,24 +479,24 @@ void inicializa() {
     addTorreT.x = addTorreT.y = addTorreT.z = 7;
 
     //Roda Gigante
-    rodaGiganteL.x = 0;
+    rodaGiganteL.x = 38;
     rodaGiganteL.y = 15;
-    rodaGiganteL.z = 10;
-    rodaGiganteT.x = rodaGiganteT.y = 15;
-    rodaGiganteT.z = 10;
+    rodaGiganteL.z = 38;
+    rodaGiganteT.x = rodaGiganteT.y = 20;
+    rodaGiganteT.z = 15;
 
     //Torre de Queda
-    torreL.x = -35;
-    torreL.y = 27;
-    torreL.z = 10;
-    torreT.x = torreT.z = 40;
-    torreT.y = 25;
+    torreL.x = -10;
+    torreL.y = 32;
+    torreL.z = -10;
+    torreT.x = torreT.z = 60;
+    torreT.y = 30;
 
     //Spinner
-    carrosselL.x = -20;
-    carrosselL.y = 17;
-    carrosselL.z = -20;
-    carrosselT.x = carrosselT.y = carrosselT.z = 20;
+    carrosselL.x = -40;
+    carrosselL.y = 14;
+    carrosselL.z = 40;
+    carrosselT.x = carrosselT.y = carrosselT.z = 18;
 }
 
 void detectaMouse(int x, int y){ 
@@ -599,6 +615,7 @@ void redimensiona(int width, int height) {
 void teclasEspeciais(int key, int x, int y) {
     switch (key) {
         case GLUT_KEY_LEFT:
+            
             modoCamera = 1;
             cameraFixa.x = -37;
             cameraFixa.y = 10;
@@ -622,10 +639,10 @@ void teclasEspeciais(int key, int x, int y) {
 void teclado(unsigned char key, int x, int y) {
     switch (key){
         case 27:    //esc
-            //exit(0);
-            tela = 0;
-            Mix_HaltChannel(-1);    //pausa música
-            glutReshapeWindow(mundoW, mundoH);  //chama a função que eu coloquei por padrão pra redimensionar
+            exit(0);
+            //tela = 0;
+            //Mix_HaltChannel(-1);    //pausa música
+            //glutReshapeWindow(mundoW, mundoH);  //chama a função que eu coloquei por padrão pra redimensionar
             break;
         //câmera que tem visão de cima/diagonal
         case '1':     
