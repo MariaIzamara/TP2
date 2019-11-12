@@ -163,7 +163,7 @@ void desenhaTorre(GLMmodel* objeto1, GLMmodel* objeto2, char* string1, char* str
         objeto1 = glmReadOBJ(string1);    
         if(!objeto1)
             exit(0);
-        glmScale(objeto1, 90.0); 
+        glmScale(objeto1, 100.0); 
         glmUnitize(objeto1);
         glmFacetNormals(objeto1);
         glmVertexNormals(objeto1, 90.0, 1); 
@@ -172,7 +172,7 @@ void desenhaTorre(GLMmodel* objeto1, GLMmodel* objeto2, char* string1, char* str
         objeto2 = glmReadOBJ(string2);    
         if(!objeto2)
             exit(0);
-        glmScale(objeto2, 90.0); 
+        glmScale(objeto2, 100.0); 
         glmUnitize(objeto2);
         glmFacetNormals(objeto2);
         glmVertexNormals(objeto2, 90.0, 1);  
@@ -266,6 +266,10 @@ void desenhaCena(){
 
         //arvores
         desenhaObjeto(paredeArvoreO, "objects/tree/paredeArvore.obj", paredeArvoreL, paredeArvoreT);
+
+        glRotatef(90, 0, 1, 0);   // [anguloRotacao, x, y, z] no caso eu giro tantos graus no eixo z.
+        desenhaObjeto(paredeArvoreO, "objects/tree/natureza.obj", paredeArvore2L, paredeArvore2T);
+        glRotatef(-90, 0, 1, 0);   // [anguloRotacao, x, y, z] no caso eu giro tantos graus no eixo z.
         //pedras perto da torre   
         //desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
 
@@ -373,6 +377,13 @@ void inicializa() {
 
     paredeArvoreT.x = paredeArvoreT.y = paredeArvoreT.z = 40; 
 
+    paredeArvore2L.x = -10;
+    paredeArvore2L.y = 15;
+    paredeArvore2L.z = 0;
+
+    paredeArvore2T.x = paredeArvore2T.y = paredeArvore2T.z = 40; 
+
+
     bancoL.x = 40;
     bancoL.y = 0.3;
     bancoL.z = 44;
@@ -417,9 +428,9 @@ void inicializa() {
     rodaGiganteT.z = 10;
 
     //Torre de Queda
-    torreL.x = -37;
+    torreL.x = -35;
     torreL.y = 27;
-    torreL.z = -50;
+    torreL.z = 10;
     torreT.x = torreT.z = 40;
     torreT.y = 25;
 
