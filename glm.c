@@ -5,6 +5,7 @@
  
       Wavefront OBJ model file format reader/writer/manipulator.
 
+
       Includes routines for generating smooth normals with
       preservation of edges, welding redundant vertices & texture
       coordinate generation (spheremap and planar projections) + more.
