@@ -1,5 +1,6 @@
 #ifndef GLM_H
 #define GLM_H
+
 /*    
       glm.h
       Nate Robins, 1997, 2000
