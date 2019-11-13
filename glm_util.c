@@ -10,6 +10,7 @@
 #include "glmint.h"
 
 #ifndef HAVE_STRDUP
+
 /* strdup is actually not a standard ANSI C or POSIX routine
    so implement a private one for GLM.  OpenVMS does not have a
    strdup; Linux's standard libc doesn't declare strdup by default
