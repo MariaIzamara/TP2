@@ -472,12 +472,6 @@ void inicializa() {
 
     carroGrayT.x = carroGrayT.y = carroGrayT.z = 8;
 
-    //Pedras
-    addTorreL.x = -32;
-    addTorreL.y = 8.5;
-    addTorreL.z = -58;
-    addTorreT.x = addTorreT.y = addTorreT.z = 7;
-
     //Roda Gigante
     rodaGiganteL.x = 38;
     rodaGiganteL.y = 15;
@@ -492,7 +486,7 @@ void inicializa() {
     torreT.x = torreT.z = 60;
     torreT.y = 30;
 
-    //Spinner
+    //Carrossel
     carrosselL.x = -40;
     carrosselL.y = 14;
     carrosselL.z = 40;
@@ -613,26 +607,69 @@ void redimensiona(int width, int height) {
 }
 
 void teclasEspeciais(int key, int x, int y) {
-    switch (key) {
-        case GLUT_KEY_LEFT:
-            
-            modoCamera = 1;
-            cameraFixa.x = -37;
-            cameraFixa.y = 10;
-            cameraFixa.z = -20;
-            cameraOlha.x = -37;
-            cameraOlha.y = 17;
-            cameraOlha.z = -50;
-            break;
-        case GLUT_KEY_RIGHT:
-            modoCamera = 1;
-            cameraFixa.x = 0;
-            cameraFixa.y = 50;
-            cameraFixa.z = 75;
-            cameraOlha.x = cameraOlha.y = cameraOlha.z = 0;
-            break;
-        default:
-            break;
+    if(modoCamera == 4) {
+        switch (key) {
+            case GLUT_KEY_RIGHT:
+                brinquedoAtual ++;
+                if(brinquedoAtual > 2)
+                    brinquedoAtual = 0;
+                if(brinquedoAtual == 0) {
+                    cameraFixa.x = 5;
+                    cameraFixa.y = 15;
+                    cameraFixa.z = 5;
+                    cameraOlha.x = 38;
+                    cameraOlha.y = 15;
+                    cameraOlha.z = 38;
+                }
+                else if(brinquedoAtual == 1) {
+                    cameraFixa.x = -10;
+                    cameraFixa.y = 25;
+                    cameraFixa.z = 30;
+                    cameraOlha.x = -10;
+                    cameraOlha.y = 25;
+                    cameraOlha.z = -10;
+                }
+                else if(brinquedoAtual == 2) {
+                    cameraFixa.x = -10;
+                    cameraFixa.y = 15;
+                    cameraFixa.z = 20;
+                    cameraOlha.x = -40;
+                    cameraOlha.y = 10;
+                    cameraOlha.z = 40;
+                }
+                break;
+            case GLUT_KEY_LEFT:
+                brinquedoAtual --;
+                if(brinquedoAtual < 0)
+                    brinquedoAtual = 2;
+                if(brinquedoAtual == 0) {
+                    cameraFixa.x = 5;
+                    cameraFixa.y = 15;
+                    cameraFixa.z = 5;
+                    cameraOlha.x = 38;
+                    cameraOlha.y = 15;
+                    cameraOlha.z = 38;
+                }
+                else if(brinquedoAtual == 1) {
+                    cameraFixa.x = -10;
+                    cameraFixa.y = 25;
+                    cameraFixa.z = 30;
+                    cameraOlha.x = -10;
+                    cameraOlha.y = 25;
+                    cameraOlha.z = -10;
+                }
+                else if(brinquedoAtual == 2) {
+                    cameraFixa.x = -10;
+                    cameraFixa.y = 15;
+                    cameraFixa.z = 20;
+                    cameraOlha.x = -40;
+                    cameraOlha.y = 10;
+                    cameraOlha.z = 40;
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -684,7 +721,6 @@ void teclado(unsigned char key, int x, int y) {
             break;
         case 'E':
         case 'e':
-            //printf("%d\n", modoCamera);
             if(modoCamera == 2)
                 cameraFixa.y -= 0.5;
             break;
@@ -693,15 +729,14 @@ void teclado(unsigned char key, int x, int y) {
             modoCamera = 3;
             break;
         //câmera que tem visão de cada brinquedo
-        case 'T':
-        case 't':   //tower (torre de queda)
-            modoCamera = 1;
-            cameraFixa.x = -37;
-            cameraFixa.y = 10;
-            cameraFixa.z = -20;
-            cameraOlha.x = -37;
-            cameraOlha.y = 17;
-            cameraOlha.z = -50;
+        case '4':
+            modoCamera = 4;
+            cameraFixa.x = 5;
+            cameraFixa.y = 15;
+            cameraFixa.z = 5;
+            cameraOlha.x = 38;
+            cameraOlha.y = 15;
+            cameraOlha.z = 38;
             break;
         //pausar ou retomar música
         case 'M':
