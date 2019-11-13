@@ -300,6 +300,12 @@ void desenhaCena(){
         //postes
         desenhaObjeto(poste4O, "objects/poste/poste4.obj", poste4L, poste4T);
 
+        //cemitério
+        glPushMatrix();
+        glRotatef(90, 0, 1, 0);
+        desenhaObjeto(cemiterioO, "objects/cemiterio/cemiterio.obj", cemiterioL, cemiterioT);
+        glPopMatrix();
+
         //pedras perto da torre   
         //desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
 
@@ -436,6 +442,11 @@ void inicializa() {
     poste4L.y = 7.5;
     poste4L.z = -10;
     poste4T.x = poste4T.y = poste4T.z = 15;
+
+    cemiterioL.x = 10;
+    cemiterioL.y = 5;
+    cemiterioL.z = -50;
+    cemiterioT.x = cemiterioT.y = cemiterioT.z = 15;
 
     paredeArvoreL.x = 52;
     paredeArvoreL.y = 9;
