@@ -231,7 +231,7 @@ void desenhaTorre(GLMmodel* objeto1, GLMmodel* objeto2, char* string1, char* str
 
 void desenhaCena(){
 
-    glColor3f(1,1,1);
+    glColor3f(1,1,1);   //clareio minha tela (principalmente pra quando estou no glOrtho)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //limpa a tela com a cor definida e limpa o mapa de profundidade
     glLoadIdentity();  //carrega a matriz identidade do modelo de visualização, sempre utilize antes de usar LookAt
     if(tela == 0) {
@@ -269,7 +269,7 @@ void desenhaCena(){
                 break;
             default:    //modoCamera = 1;
                 gluLookAt(cameraFixa.x, cameraFixa.y, cameraFixa.z,   //onde a câmera  está
-                        cameraOlha.x, cameraOlha.y, cameraOlha.z,                     //pra onde a câmera tá olhando
+                        cameraOlha.x, cameraOlha.y, cameraOlha.z,     //pra onde a câmera tá olhando
                         0, 1, 0);                    //coordenada que ela gira
         }
 
@@ -279,15 +279,14 @@ void desenhaCena(){
         else
             glEnable(GL_FOG);
 
+        //chão
         desenhaObjeto(chaoO, "objects/floor/floor.obj", chaoL, chaoT);
+
         //carros
         desenhaObjeto(carroBrownO, "objects/car/carBrown.obj", carroBrownL, carroBrownT);
         desenhaObjeto(carroBlueO, "objects/car/carBlue.obj", carroBlueL, carroBlueT);
         desenhaObjeto(carroRedO, "objects/car/carRed.obj", carroRedL, carroRedT);
         desenhaObjeto(carroGrayO, "objects/car/carGray.obj", carroGrayL, carroGrayT);
-
-        //arvores
-        //desenhaObjeto(paredeArvoreO, "objects/tree/paredeArvore.obj", paredeArvoreL, paredeArvoreT);
 
         //caminhos
         desenhaObjeto(caminhoQO, "objects/caminho/caminhoQ.obj", caminhoQL, caminhoQT);
@@ -296,6 +295,7 @@ void desenhaCena(){
 
         //bancos
         desenhaObjeto(banco4O, "objects/banco/banco4.obj", banco4L, banco4T);
+        desenhaObjeto(bancoPO, "objects/banco/bancoP.obj", bancoPL, bancoPT);
 
         //postes
         desenhaObjeto(poste4O, "objects/poste/poste4.obj", poste4L, poste4T);
@@ -304,21 +304,28 @@ void desenhaCena(){
         glPushMatrix();
         glRotatef(90, 0, 1, 0);
         desenhaObjeto(cemiterioO, "objects/cemiterio/cemiterio.obj", cemiterioL, cemiterioT);
+        desenhaObjeto(cemiterio1O, "objects/cemiterio/cemiterio1.obj", cemiterio1L, cemiterio1T);
         glPopMatrix();
 
-        //pedras perto da torre   
-        //desenhaObjeto(pedraTorreO, "objects/lixeira/lixeira.obj", addTorreL, addTorreT);
+        //arvores
+        glPushMatrix();
+        glRotatef(0, 90, 1, 0);
+        desenhaObjeto(arvoreO, "objects/tree/conjuntoArvores.obj", arvoreL, arvoreT);
+        glPopMatrix();
+        desenhaObjeto(arvore1O, "objects/tree/arvoresMortas.obj", arvore1L, arvore1T);
 
-        //Roda Gigante
-        
+        //lixeiras
+        desenhaObjeto(lixeira1O, "objects/lixeira/lixeira1.obj", lixeira1L, lixeira1T);
+        desenhaObjeto(lixeira2O, "objects/lixeira/lixeira2.obj", lixeira2L, lixeira2T);
+
+        //Roda Gigante 
         desenhaRodaGigante(rodagiganteBaseO, rodagiganteRodaO,rodagiganteCarrinhoO,"objects/rodaGigante/base.obj", "objects/rodaGigante/roda.obj", 
                             "objects/rodaGigante/carrinho.obj", rodaGiganteL, rodaGiganteT);
        
-
         //Torre de Queda
         desenhaTorre(torreBaseO, torreCarrinhoO, "objects/torre/torre.obj", "objects/torre/carrinho.obj", torreL, torreT);
 
-        //Spinner
+        //Carrossel
         desenhaCarrossel(carrosselBaseO, carrosselCorpoO, "objects/carrossel/carrosselBase.obj", "objects/carrossel/carrosselCorpo.obj", carrosselL, carrosselT);
     }
 
@@ -340,19 +347,15 @@ void desenhaCena(){
 void inicializa() {
     
     srand(time(0));
-    glClearColor(0.176, 0.176, 0.176, 0);   //cor de fundo preto
+    glClearColor(0.176, 0.176, 0.176, 0);   //cor de fundo quase preto
 
     // habilita mesclagem de cores, para termos suporte a texturas com transparência
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  //para poder criar objetos transparentes
 
-    volume = MIX_MAX_VOLUME;
-    Mix_Volume(-1, volume);
-        //(canal, volume) - se eu dividir o MIX_MAX_VOLUME eu vou diminuindo o som
-
     //luz ambiente global que é usada para iluminar uniformemente todos os objetos da cena
     glMaterialfv (GL_FRONT_AND_BACK, GL_LIGHT_MODEL_AMBIENT, corMaterial);  
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, corMaterial);
+    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, corMaterial);  //tava clareando muito
     
     //iluminação
     glLightfv(GL_LIGHT0, GL_AMBIENT, luzC.ambiente);
@@ -362,10 +365,10 @@ void inicializa() {
     
     //névoa
     glFogi(GL_FOG_MODE, GL_EXP); //modo de decaimento da névoa
-    glFogf(GL_FOG_DENSITY, 0.02);    //densidade da névoa
+    glFogf(GL_FOG_DENSITY, 0.015);    //densidade da névoa
     glFogfv(GL_FOG_COLOR, corNevoa);    //cor da névoa
 
-    //mundoW = 1000 e mundoH = 600
+    //configura telas iniciais
     park.a = 100;
     park.b = 370;
     park.c = 290;
@@ -400,6 +403,12 @@ void inicializa() {
     idTexturaInstructions = carregaTextura("images/Instructions.png");
     idTexturaCredits = carregaTextura("images/Credits.png");
 
+    //configura volume da música
+    volume = MIX_MAX_VOLUME;
+    Mix_Volume(-1, volume);
+        //(canal, volume) - se eu dividir o MIX_MAX_VOLUME eu vou diminuindo o som
+
+    //configura cameras
     centro.x = centro.y = centro.z = 0;
     mouse.x = mouse.y = mouse.z = 0;
 
@@ -408,79 +417,103 @@ void inicializa() {
     theta = 0;
 
     cameraFixa.x = 0;
-    cameraFixa.y = 50;
-    cameraFixa.z = 75;  //maior que o raio da minha esfera
+    cameraFixa.y = 52;
+    cameraFixa.z = -72;  //maior que o raio da minha esfera
     cameraOlha.x = cameraOlha.y = cameraOlha.z = 0;
 
+    //chão
     chaoL.x = chaoL.y = chaoL.z = 0;
     chaoT.x = chaoT.z = 60;
     chaoT.y = 100;
-    
+
+    //caminhos
     caminhoCL.x = -10;
     caminhoCL.y = 1;
     caminhoCL.z = 35;
     caminhoCT.x = caminhoCT.y = 9;
     caminhoCT.z = 25;
 
-    caminhoRL.x = 20;
+    caminhoRL.x = 35;
     caminhoRL.y = 1;
     caminhoRL.z = -10;
     caminhoRT.y = caminhoRT.z = 9;
-    caminhoRT.x = 39;
+    caminhoRT.x = 25;
 
     caminhoQL.x = -10;
     caminhoQL.y = 1;
     caminhoQL.z = -10;
     caminhoQT.x = caminhoQT.y = caminhoQT.z = 20;
 
+    //bancos
     banco4L.x = -10;
     banco4L.y = 3;
     banco4L.z = -10;
     banco4T.x = banco4T.y = banco4T.z = 17;
 
+    bancoPL.x = 5;
+    bancoPL.y = 7;
+    bancoPL.z = 56;
+    bancoPT.x = bancoPT.y = bancoPT.z = 10; 
+
+    //postes
     poste4L.x = -10;
     poste4L.y = 7.5;
     poste4L.z = -10;
     poste4T.x = poste4T.y = poste4T.z = 15;
 
+    //tumulos
     cemiterioL.x = 10;
     cemiterioL.y = 5;
     cemiterioL.z = -50;
-    cemiterioT.x = cemiterioT.y = cemiterioT.z = 15;
+    cemiterioT.x = cemiterioT.y = 15;
+    cemiterioT.z = 20;
 
-    paredeArvoreL.x = 52;
-    paredeArvoreL.y = 9;
-    paredeArvoreL.z = 20;
-    paredeArvoreT.x = paredeArvoreT.y = paredeArvoreT.z = 40; 
+    cemiterio1L.x = 48;
+    cemiterio1L.y = 3.5;
+    cemiterio1L.z = 57;
+    cemiterio1T.x = cemiterio1T.y = cemiterio1T.z = 3.5;
 
-    bancoL.x = 40;
-    bancoL.y = 0.3;
-    bancoL.z = 44;
+    //arvores
+    arvoreL.x = 48;
+    arvoreL.y = 9;
+    arvoreL.z = -5;
+    arvoreT.x = arvoreT.y = arvoreT.z = 20;
 
-    bancoT.x = bancoT.y = bancoT.z = 20;
+    arvore1L.x = -52;
+    arvore1L.y = 11;
+    arvore1L.z = -47;
+    arvore1T.x = arvore1T.y = arvore1T.z = 15;
 
+    //lixeiras
+    lixeira1L.x = -16;
+    lixeira1L.y = 5;
+    lixeira1L.z = 20;
+    lixeira1T.x = lixeira1T.y = lixeira1T.z = 3; 
+
+    lixeira2L.x = 20;
+    lixeira2L.y = 5;
+    lixeira2L.z = -16;
+    lixeira2T.x = lixeira2T.y = lixeira2T.z = 3; 
+
+    //carros
     carroBrownL.x = 50; 
     carroBrownL.y = 3;
     carroBrownL.z = -55;
-
     carroBrownT.x = carroBrownT.y = carroBrownT.z = 7;
 
     carroBlueL.x = 50; 
     carroBlueL.y = 3;
     carroBlueL.z = -30.5;
-
     carroBlueT.x = carroBlueT.y = carroBlueT.z = 8;
 
     carroRedL.x = 23.7; 
     carroRedL.y = 3;
     carroRedL.z = -38.9;
-
     carroRedT.x = carroRedT.y = carroRedT.z = 8;
 
     carroGrayL.x = 23.7; 
     carroGrayL.y = 3;
     carroGrayL.z = -55;
-
     carroGrayT.x = carroGrayT.y = carroGrayT.z = 8;
 
     //Roda Gigante
@@ -512,8 +545,6 @@ void detectaMouse(int x, int y){
 
     if(phi>=180)
         phi=180;
-
-    //printf("x: %d y: %d\n", x, y);
 
     //aqui eu guardo a posição anterior do meu mouse
     mouse.x = x;
@@ -560,6 +591,12 @@ void detectaClique(int botao, int estado, int x, int y)
 				//clicando "Go to the park"
 				if(mouse.x >= park.a && mouse.x <= park.b && mouse.y >= park.c && mouse.y <= park.d) {
 					tela = 1;
+                    //volto pro parque com tudo resetado
+                    modoCamera = 1;
+                    cameraFixa.x = 0;
+                    cameraFixa.y = 52;
+                    cameraFixa.z = -72;  
+                    cameraOlha.x = cameraOlha.y = cameraOlha.z = 0;
 					glutReshapeWindow(mundoW, mundoH);  //chama a função que eu coloquei por padrão pra redimensionar
                 }
                 //clicando "Instructions"
@@ -585,38 +622,35 @@ void detectaClique(int botao, int estado, int x, int y)
     }
 }
 
-
-void redimensiona(int width, int height) {
-    mundoW = width;     //1000
-    mundoH = height;    //600
-
-    switch(tela) {
-        case 0:           
-        case 2:
-        case 3: 
-            luz = 0;
-            glDisable(GL_DEPTH_TEST);
-            glViewport(0, 0, width, height);
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrtho(0, width, 0, height, -1, 1);
-            glMatrixMode(GL_MODELVIEW); //ativa o modo de matriz de visualização para utilizar o LookAt
-            glLoadIdentity();
-            break;
-        case 1:
-            Mix_PlayChannel(-1, Mix_LoadWAV("sounds/teremim.wav"), 1);
-                            //(canal, carrega formatos WAV, loop)
-            glEnable(GL_DEPTH_TEST);             //ativa o Z buffer
-            glViewport (0, 0, width, height);    //define a proporção da janela de visualização
-            glMatrixMode (GL_PROJECTION);        //define o tipo de matriz de transformação que será utilizada
-            glLoadIdentity();                    //carrega a matriz identidade do tipo GL_PROJECTION configurado anteriormente
-            gluPerspective(90, (float)width/(float)height, 0.2, 400.0);   //funciona como se fosse o glOrtho, mas para o espaço 3D
-            glMatrixMode(GL_MODELVIEW);                                   //ativa o modo de matriz de visualização para utilizar o LookAt
-            glLoadIdentity(); 
-            break;
+void controlaVolume() {
+    if(vA == 1) {
+        volume += 10;
+        Mix_Volume(-1, volume);
+    }
+    if(vD == 1) {
+        volume -= 10;
+        Mix_Volume(-1, volume);
     }
 }
 
+void movimentaCamera() {
+    if(modoCamera == 2) {
+        if(w == 1)
+            cameraFixa.z ++;
+        if(s == 1)
+            cameraFixa.z --;
+        if(a == 1)
+            cameraFixa.x ++;
+        if(d == 1)
+            cameraFixa.x --;
+        if(q == 1)
+            cameraFixa.y ++;
+        if(e == 1)
+            cameraFixa.y --;
+    }
+}
+
+//anda pelos brinquedos com as setinhas <- e ->
 void teclasEspeciais(int key, int x, int y) {
     if(modoCamera == 4) {
         switch (key) {
@@ -684,62 +718,59 @@ void teclasEspeciais(int key, int x, int y) {
     }
 }
 
-void teclado(unsigned char key, int x, int y) {
+void teclaApertada(unsigned char key, int x, int y) {
     switch (key){
         case 27:    //esc
-            exit(0);
-            //tela = 0;
-            //Mix_HaltChannel(-1);    //pausa música
-            //glutReshapeWindow(mundoW, mundoH);  //chama a função que eu coloquei por padrão pra redimensionar
+            //exit(0);
+            tela = 0;
+            Mix_HaltChannel(-1);    //pausa música
+            glutReshapeWindow(mundoW, mundoH);  //chama a função que eu coloquei por padrão pra redimensionar
             break;
         //câmera que tem visão de cima/diagonal
         case '1':     
             modoCamera = 1;
             cameraFixa.x = 0;
-            cameraFixa.y = 50;
-            cameraFixa.z = 75;
+            cameraFixa.y = 52;
+            cameraFixa.z = -72;  
             cameraOlha.x = cameraOlha.y = cameraOlha.z = 0;
             break;
         //camêra em primeira pessoa que utiliza as teclas A D W S Q E para se mover
         case '2':   
             modoCamera = 2;
+            cameraFixa.x = 0;
+            cameraFixa.y = 15;
+            cameraFixa.z = -70;
             break;
         //alguns sinais estão ao contrário do costume justamente pra ter o efeito desejado
         case 'W':
         case 'w':
-            if(modoCamera == 2)
-                cameraFixa.z -= 0.5;
+            w = 1;
             break;
         case 'S':
         case 's':
-            if(modoCamera == 2)
-                cameraFixa.z += 0.5;
+            s = 1;
             break;
         case 'A':
         case 'a':
-            if(modoCamera == 2)
-                cameraFixa.x -= 0.5;
+            a = 1;
             break;
         case 'D':
         case 'd':
-            if(modoCamera == 2)
-                cameraFixa.x += 0.5;
+            d = 1;
             break;
         case 'Q':
         case 'q': 
-            if(modoCamera == 2)
-                cameraFixa.y += 0.5;
+            q = 1;
             break;
         case 'E':
         case 'e':
-            if(modoCamera == 2)
-                cameraFixa.y -= 0.5;
+            e = 1;
             break;
         //camêra em terceira pessoa que utiliza o mouse pra mover
         case '3':  
             modoCamera = 3;
             break;
-        //câmera que tem visão de cada brinquedo
+        //câmera que tem visão de cada brinquedo, começa na roda gigante
         case '4':
             modoCamera = 4;
             cameraFixa.x = 5;
@@ -778,14 +809,79 @@ void teclado(unsigned char key, int x, int y) {
                 nevoa = true;
             break;
         case '+':
-            volume += 10;
-            Mix_Volume(-1, volume);
+            vA = 1;
             break;
         case '-':
-            volume -= 10;
-            Mix_Volume(-1, volume);
+            vD = 1;
             break;
         default:
+            break;
+    }
+}
+
+void teclaSolta(unsigned char key, int x, int y) {
+    switch (key){
+        case 'W':
+        case 'w':
+            w = 0;
+            break;
+        case 'S':
+        case 's':
+            s = 0;
+            break;
+        case 'A':
+        case 'a':
+            a = 0;
+            break;
+        case 'D':
+        case 'd':
+            d = 0;
+            break;
+        case 'Q':
+        case 'q': 
+            q = 0;
+            break;
+        case 'E':
+        case 'e':
+            e = 0;
+            break;
+        case '+':
+            vA = 0;
+        case '-':
+            vD = 0;
+        default:
+            break;
+    }
+}
+
+void redimensiona(int width, int height) {
+    mundoW = width;     //1000
+    mundoH = height;    //600
+
+    switch(tela) {
+        case 0:           
+        case 2:
+        case 3: 
+            luz = false;
+            glDisable(GL_DEPTH_TEST);
+            glViewport(0, 0, width, height);
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            glOrtho(0, width, 0, height, -1, 1);
+            glMatrixMode(GL_MODELVIEW); //ativa o modo de matriz de visualização para utilizar o LookAt
+            glLoadIdentity();
+            break;
+        case 1:
+	    luz = true;
+            Mix_PlayChannel(-1, Mix_LoadWAV("sounds/teremim.wav"), 1);
+                            //(canal, carrega formatos WAV, loop)
+            glEnable(GL_DEPTH_TEST);             //ativa o Z buffer
+            glViewport (0, 0, width, height);    //define a proporção da janela de visualização
+            glMatrixMode (GL_PROJECTION);        //define o tipo de matriz de transformação que será utilizada
+            glLoadIdentity();                    //carrega a matriz identidade do tipo GL_PROJECTION configurado anteriormente
+            gluPerspective(90, (float)width/(float)height, 0.2, 400.0);   //funciona como se fosse o glOrtho, mas para o espaço 3D
+            glMatrixMode(GL_MODELVIEW);                                   //ativa o modo de matriz de visualização para utilizar o LookAt
+            glLoadIdentity(); 
             break;
     }
 }
@@ -794,6 +890,8 @@ void atualizaCena(int periodo) {
 
     //pede ao GLUT para redesenhar a tela assim que possível
     glutPostRedisplay();
+    movimentaCamera();
+    controlaVolume();
     acrescentarAngulos();
     acrescentarAltura();
     //se registra novamente, para que fique sempre sendo chamada
@@ -820,8 +918,8 @@ int main(int argc, char** argv) {
     glutReshapeFunc(redimensiona);  //guarda qual é a função que redimensiona "callback"
 
     glutSpecialFunc(teclasEspeciais);
-    glutKeyboardFunc(teclado);
-  //glutKeyboardUpFunc(teclaLiberada);      //caso eu queira mudar tal estado assim que a pessoa soltar a tecla (keyboard[key] = false;)
+    glutKeyboardFunc(teclaApertada);
+    glutKeyboardUpFunc(teclaSolta);      //caso eu queira mudar tal estado assim que a pessoa soltar a tecla (keyboard[key] = false;)
 
     glutTimerFunc(0, atualizaCena, 10);
     glutPassiveMotionFunc(detectaMouse);

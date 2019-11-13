@@ -12,10 +12,12 @@ coordenadas rodaGiganteL, torreL, carrosselL;
 coordenadas rodaGiganteT, torreT, carrosselT;
 
 //Localização dos objetos
-coordenadas chaoL, terraL, addTorreL, bancoL, caminhoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, paredeArvoreL, paredeArvore2L, caminhoQL, caminhoCL, caminhoRL, banco4L, poste4L, cemiterioL;
+coordenadas chaoL, carroBrownL, carroRedL, carroGrayL, carroBlueL, caminhoQL, caminhoCL, caminhoRL, banco4L, bancoPL, poste4L, cemiterioL;
+coordenadas cemiterio1L, arvoreL, arvore1L, lixeira1L, lixeira2L;
 
 //Tamanho dos objetos
-coordenadas chaoT, terraT, addTorreT, entradaT, bancoT, caminhoT, carroBrownT, carroRedT, carroGrayT, carroBlueT, paredeArvoreT, paredeArvore2T, caminhoQT, caminhoCT, caminhoRT, banco4T, poste4T, cemiterioT;
+coordenadas chaoT, carroBrownT, carroRedT, carroGrayT, carroBlueT, caminhoQT, caminhoCT, caminhoRT, banco4T, bancoPT, poste4T, cemiterioT;
+coordenadas cemiterio1T, arvoreT, arvore1T, lixeira1T, lixeira2T;
 
 //configura alguns parâmetros do modelo de iluminação
 typedef struct {
@@ -29,19 +31,10 @@ typedef struct {
 } iluminacao;
 
 
-iluminacao luzC = { {1.0, 1, 1.0, 1.0},
+iluminacao luzC = { {0.176, 0.176, 0.176, 1.0},
                     {0.5, 0.5, 0.5, 1.0},
                     {1.0, 1.0, 1.0, 1.0},
                     {0.0, 20.0, 0.0, 1.0} };
-
-/*
-iluminacao materialC = { {0.7f, 0.7f, 0.7f, 1},
-                         {0.8f, 0.8f, 0.8f, 1},
-                         {1.0f, 1.0f, 1.0f, 1.0f} };
-                
-iluminacao brilhoC = { {}, {}, {}, {}, {}, {100.0f}};
-*/
-
 
 typedef struct {
     GLint a;
@@ -53,13 +46,12 @@ typedef struct {
 telas park, instructions, credits, exits, back;
 
 //variáveis para verificação
-bool luz = false, nevoa = false, som = true;
+bool luz = true, nevoa = true, som = true;
 
 int modoCamera = 1; //modo padrão
-int tela = 1;    //variável que me diz em qual tela estou
+int tela = 0;    //variável que me diz em qual tela estou
 int mundoW, mundoH;  //variáveis que guardam a altura e largura do meu mundo
 float theta, phi; //tipo no 2D
-float volume;   //controla o volume da música
 int brinquedoAtual = 0;
 
 float corNevoa[3] = {0.176, 0.176, 0.176};
@@ -69,11 +61,19 @@ float corMaterial[3] = {1, 1, 1};
 
 //Roda Gigante
 float anguloRodaGigante = 0;
+//Carrossel
 float anguloCarrossel = 0;
 //Torre de Queda
 int permisaoSubir = 0, permisaoDescer = 0, aguardaEmBaixo = 1, aguardaEmCima = 0;
 float alturaTorre = -7.8;
 float tempo = 0;
+
+//variáveis de controle da camera no modo 2
+int a = 0, d = 0, w = 0, s = 0, q = 0, e = 0;
+
+//variáveis de controle do volume do som
+int vA = 0, vD = 0;
+float volume;   //controla o volume da música
 
 //imagens
 GLuint idTexturaMenu;
@@ -87,9 +87,6 @@ GLuint idTexturaBackT;
 
 //objetos
 GLMmodel* chaoO = NULL;   
-GLMmodel* pedraTorreO = NULL;  
-GLMmodel* entradaO = NULL;
-GLMmodel* caminhoO = NULL;
 GLMmodel* rodagiganteBaseO = NULL;
 GLMmodel* rodagiganteRodaO = NULL;
 GLMmodel* rodagiganteCarrinhoO = NULL;
@@ -101,17 +98,17 @@ GLMmodel* carroBrownO = NULL;
 GLMmodel* carroBlueO = NULL;
 GLMmodel* carroRedO = NULL;
 GLMmodel* carroGrayO = NULL;
-GLMmodel* paredeArvoreO = NULL;
-GLMmodel* paredeArvore2O = NULL;
 GLMmodel* caminhoQO = NULL;
 GLMmodel* caminhoCO = NULL;
 GLMmodel* caminhoRO = NULL;
 GLMmodel* banco4O = NULL;
+GLMmodel* bancoPO = NULL;
 GLMmodel* poste4O = NULL;
 GLMmodel* cemiterioO = NULL;
-
-#define AumentoAngulo_RodaGigante 1
-#define AumentoAngulo_Carrossel 0,05
-#define AnguloEntreCarrinhos M_PI/4
+GLMmodel* cemiterio1O = NULL;
+GLMmodel* arvoreO = NULL;
+GLMmodel* arvore1O = NULL;
+GLMmodel* lixeira1O = NULL;
+GLMmodel* lixeira2O = NULL;
 
 
