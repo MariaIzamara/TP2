@@ -1,4 +1,3 @@
-Segundo Trabalho Prático de Computação Gráfica - Parque de Diversões
 # Descrição / Description
 Parque de diversões assombrado criado em OpenGL e C para a aula de Computação Gráfica do curso de Engenharia de Computação do CEFET-MG, ministrada pelo prof. Flávio Roberto dos Santos Coutinho.
 
