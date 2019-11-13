@@ -28,6 +28,6 @@ Assista o jogo em https://youtu.be/JGcxWk_qeS0.
 Watch the game on https://youtu.be/JGcxWk_qeS0.
 
 # Screenshots
-![](https://images/2.png?raw=true)
-![](https://images/3.png?raw=true)
-![](https://images/4.png?raw=true)
+![](https://github.com/MariaIzamara/TP2/blob/master/images/2.png?raw=true)
+![](https://github.com/MariaIzamara/TP2/blob/master/images/3.png?raw=true)
+![](https://github.com/MariaIzamara/TP2/blob/master/images/4.png?raw=true)
